@@ -1,0 +1,15 @@
+{
+  "name": "Road to 50",
+  "short_name": "Road to 50",
+  "description": "24-week plan to raise VO2max to 50 and beep test level to 10.0",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101815",
+  "theme_color": "#101815",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

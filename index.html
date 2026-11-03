@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Road to 50</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#101815">
+<meta name="apple-mobile-web-app-title" content="Road to 50">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF1EC;--ink:#101815;--card:#fff;--line:#D5DBD3;--acc:#0B57D0;--hard:#C2410C;--mut:#5B6760;--on:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1412;--ink:#E9EEE9;--card:#17201C;--line:#2A3731;--acc:#6EA8FF;--hard:#FF8A5B;--mut:#94A39A;--on:#0E1412;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1412;--ink:#E9EEE9;--card:#17201C;--line:#2A3731;--acc:#6EA8FF;--hard:#FF8A5B;--mut:#94A39A;--on:#0E1412;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+h1,h2{font-family:"Barlow Condensed","Arial Narrow",sans-serif;margin:0;line-height:1}
+h1{font-size:40px;font-weight:700}
+h2{font-size:28px;font-weight:700}
+.mut{color:var(--mut)}
+.lanes{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;margin:16px 0 22px}
+.lane{height:28px;border:0;padding:0;border-radius:3px;cursor:pointer;background:linear-gradient(to top,var(--acc) var(--p,0%),var(--line) var(--p,0%))}
+.lane.cur{outline:2px solid var(--ink);outline-offset:1px}
+.wk{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nav{display:flex;gap:8px}
+.nav button,.btn{min-height:44px;min-width:44px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 16px Barlow,system-ui,sans-serif;padding:0 14px;cursor:pointer}
+.nav button:disabled{opacity:.35}
+.day{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:10px;padding:12px;margin:10px 0}
+.day.hard{border-left-color:var(--hard)}.day.long{border-left-color:var(--acc)}.day.test{border-left-color:var(--ink)}
+.day.today{box-shadow:0 0 0 2px var(--ink)}
+.day.done .t{text-decoration:line-through;opacity:.55}
+.chk{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--mut);background:transparent;color:var(--on);font-size:22px;line-height:1;cursor:pointer}
+.done .chk{background:var(--acc);border-color:var(--acc)}
+.body{min-width:0;flex:1}
+.d{font-size:14px;color:var(--mut)}
+.t{font-weight:600;font-size:18px}
+.x{margin-top:2px}
+.day input{width:100%;margin-top:8px;min-height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:0 10px;font:16px Barlow,system-ui,sans-serif}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin:18px 0}
+summary{font-weight:600;cursor:pointer;min-height:24px}
+details ul{margin:10px 0 0;padding-left:20px}
+.foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px}
+.foot input{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 10px;font:16px Barlow,system-ui,sans-serif}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style></head>
+<body><main>
+<h1>Road to 50</h1>
+<div class="mut">VO2max 50 and beep test level 10.0. No rush, just keep ticking.</div>
+<div class="lanes" id="lanes" aria-label="Weeks"></div>
+<div class="wk"><div><h2 id="wt"></h2><div class="mut" id="ws"></div></div><div class="nav"><button id="pv" aria-label="Previous week">&lsaquo;</button><button id="nx" aria-label="Next week">&rsaquo;</button></div></div>
+<div id="days"></div>
+<details><summary>Training in the heat</summary><ul>
+<li>Run early morning or evening. Do hard sessions in the coolest conditions you can find, or indoors.</li>
+<li>Run easy days by effort (you can hold a conversation), not heart rate. Expect HR 5-15 bpm higher than usual.</li>
+<li>Garmin reads VO2max low in the heat. Watch the trend over weeks, not one number.</li>
+<li>Allow 10-14 days to adapt. Drink before and after, and cut a session short if you feel unwell.</li></ul></details>
+<div class="foot"><label class="mut" for="sd">Plan starts</label><input type="date" id="sd"><button class="btn" id="rs">Reset ticks</button></div>
+<div class="foot"><button class="btn" id="bk">Back up progress</button><button class="btn" id="rb">Restore backup</button><input type="file" id="rf" accept=".json,application/json" hidden></div>
+<div class="mut" id="ms" role="status" style="margin-top:8px"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let S={start:null,done:{},sc:{}};
+try{const r=localStorage.getItem('r50');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem('r50',JSON.stringify(S))}catch(e){}};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const pd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const fmt=d=>d.toLocaleDateString(undefined,{day:'numeric',month:'short'});
+const today=new Date();today.setHours(0,0,0,0);
+if(!S.start){const o=(today.getDay()+6)%7;S.start=iso(o?add(today,7-o):today);save()}
+const L=[0,0,6,5,7,8,10,7,10,11,11,8,11,12,12,8,12,12,12,8,12,12,12,0];
+const TH={9:'2×8',10:'2×8',11:'2×10',12:'2×6',13:'2×10',14:'3×8',15:'3×8',16:'2×6',17:'3×8',18:'3×10',19:'3×10',20:'2×8',21:'3×10',22:'3×10',23:'3×8'};
+const IV={9:'3×4',10:'4×4',11:'4×4',12:'3×3',13:'5×3',14:'5×3',15:'6×3',16:'4×3'};
+const IF={17:'2 sets of 8',18:'2 sets of 10',19:'3 sets of 8',20:'2 sets of 8',21:'3 sets of 8',22:'3 sets of 10',23:'2 sets of 10'};
+const SH={17:'5×1 min',18:'6×1 min',19:'6×90 s',21:'6×90 s',22:'8×1 min',23:'6×90 s'};
+const E='Easy, conversation pace';
+const PH=n=>n<=2?'Restart':n<=8?'Base':n<=16?'Intervals':'Beep-specific';
+function plan(n){
+ const dl=n%4==0,R=['Rest','Optional 15 min mobility and stretching.','rest'];
+ const X=['Bike or swim',(n<3||dl?'40':'45-60')+' min easy, low impact.','easy'];
+ let tue,thu,sat,sun;
+ if(n<=2){tue=['Easy run','25-30 min. '+E+'.','easy'];thu=['Easy run','30 min. '+E+'.','easy'];sat=['Easy run','30-35 min. '+E+'.','easy'];sun=['Walk or rest','Easy 30 min walk if you feel like it.','rest']}
+ else{
+  tue=n<9?['Easy run','30-40 min. '+E+'.','easy']:n<24?['Threshold run','10 min easy, then '+TH[n]+' min comfortably hard (about 7/10), 2 min jog between, 10 min easy.','hard']:['Easy run','25 min. '+E+'.','easy'];
+  thu=n<9?['Easy run','30-35 min. '+E+(n>=5?', then 6 strides (15 s fast but relaxed).':'.'),'easy']:n<=16?['Interval run','10 min easy, then '+IV[n]+' min hard (about 8-9/10), jog 3 min between, 10 min easy.','hard']:n<24?['30-15 intervals','Warm up 10 min, then '+IF[n]+' reps (30 s hard, 15 s walk), 3 min rest between sets.','hard']:['Easy run','20 min easy plus 4 strides.','easy'];
+  sat=dl?['Fitness test','Beep test, or a 12-minute run if you have no audio or space. Cool conditions, warm up 10 min. Log your result below.','test']:n<9?['Easy run','25-35 min. '+E+(n>=5?', plus 6 strides.':'.'),'easy']:n<=16?['Easy run and turns','25-30 min easy, then 4 easy 20 m shuttle runs to practise turning.','easy']:['Shuttle session','Warm up 10 min, then '+SH[n]+' of 20 m shuttles at beep-test pace, 90 s rest between. Cool down 5 min.','hard'];
+  sun=n==24?['Rest','Well done. Review your test results.','rest']:['Long run',L[n-1]+' km. '+E+'. Slow down on hot days.','long']}
+ return [['Mon',...R],['Tue',...tue],['Wed',...X],['Thu',...thu],['Fri',...R],['Sat',...sat],['Sun',...sun]].map((a,i)=>({i,d:a[0],t:a[1],x:a[2],k:a[3]}));
+}
+const pct=n=>{const p=plan(n).filter(x=>x.k!='rest');return Math.round(100*p.filter(x=>S.done[n+'-'+x.i]).length/p.length)};
+const curWeek=()=>Math.min(24,Math.max(1,Math.floor((today-pd(S.start))/604800000)+1));
+let cw=curWeek(),armed=false;
+function render(){
+ $('#sd').value=S.start;
+ $('#lanes').innerHTML=Array.from({length:24},(_,i)=>`<button class="lane${i+1==cw?' cur':''}" style="--p:${pct(i+1)}%" data-w="${i+1}" aria-label="Week ${i+1}"></button>`).join('');
+ const st=add(pd(S.start),(cw-1)*7),p=plan(cw),sess=p.filter(x=>x.k!='rest'),dn=sess.filter(x=>S.done[cw+'-'+x.i]).length;
+ $('#wt').textContent='Week '+cw+' of 24, '+PH(cw);
+ $('#ws').textContent=fmt(st)+' to '+fmt(add(st,6))+'. '+dn+' of '+sess.length+' sessions done.';
+ $('#pv').disabled=cw==1;$('#nx').disabled=cw==24;
+ $('#days').innerHTML=p.map(x=>{const dt=add(st,x.i),k=cw+'-'+x.i;
+  return `<div class="day ${x.k}${S.done[k]?' done':''}${iso(dt)==iso(today)?' today':''}"><button class="chk" data-k="${k}" aria-pressed="${!!S.done[k]}" aria-label="Mark ${x.d} done">${S.done[k]?'&#10003;':''}</button><div class="body"><div class="d">${x.d} ${fmt(dt)}</div><div class="t">${x.t}</div><div class="x">${x.x}</div>${x.k=='test'?`<input data-s="${cw}" value="${(S.sc[cw]||'').replace(/"/g,'&quot;')}" placeholder="Result, e.g. level 9.4" aria-label="Test result">`:''}</div></div>`}).join('');
+}
+document.addEventListener('click',e=>{
+ const c=e.target.closest('[data-k]'),w=e.target.closest('[data-w]');
+ if(c){const k=c.dataset.k;S.done[k]?delete S.done[k]:S.done[k]=1;save();render()}
+ else if(w){cw=+w.dataset.w;render()}
+ else if(e.target.closest('#pv')){cw--;render()}
+ else if(e.target.closest('#nx')){cw++;render()}
+ else if(e.target.closest('#rs')){const b=$('#rs');if(!armed){armed=true;b.textContent='Tap again to erase all ticks';setTimeout(()=>{armed=false;b.textContent='Reset ticks'},4000)}else{S.done={};S.sc={};armed=false;b.textContent='Reset ticks';save();render()}}
+});
+document.addEventListener('input',e=>{if(e.target.dataset.s){S.sc[e.target.dataset.s]=e.target.value;save()}});
+$('#sd').addEventListener('change',e=>{if(e.target.value){S.start=e.target.value;save();cw=curWeek();render()}});
+const msg=t=>{$('#ms').textContent=t};
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+$('#bk').onclick=async()=>{
+ const f=new File([JSON.stringify(S)],'road-to-50-backup.json',{type:'application/json'});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Road to 50 backup'});msg('Backup shared. Save it to Files or Drive.');return}}catch(e){if(e&&e.name==='AbortError')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();msg('Backup downloaded. Keep the file somewhere safe.')};
+$('#rb').onclick=()=>$('#rf').click();
+$('#rf').onchange=e=>{const f=e.target.files[0];if(!f)return;
+ f.text().then(t=>{const o=JSON.parse(t);if(!o||typeof o.done!=='object')throw 0;S=Object.assign({start:S.start,done:{},sc:{}},o);save();cw=curWeek();render();msg('Progress restored.')}).catch(()=>msg('That file is not a valid backup.'));e.target.value=''};
+render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
